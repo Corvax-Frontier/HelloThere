@@ -15,7 +15,7 @@ public sealed class Info : PageModel
 
     public bool Whitelisted { get; set; }
     public Player Player { get; set; } = default!;
-    public IAdminRemarksCommon[] Remarks { get; set; } = default!;
+    // public IAdminRemarksCommon[] Remarks { get; set; } = default!;
     public PlayTime[] PlayTimes { get; set; } = default!;
     public Profile[] Profiles { get; set; } = default!;
     public ISortState RoleSortState { get; private set; } = default!;
@@ -64,13 +64,13 @@ public sealed class Info : PageModel
 
         Player = player;
 
-        var notes = await RemarksCommonQuery(_dbContext.AdminNotes);
-        var watchlist = await RemarksCommonQuery(_dbContext.AdminWatchlists);
-        var messages = await RemarksCommonQuery(_dbContext.AdminMessages);
-
-        Remarks = notes.Concat(watchlist).Concat(messages)
-            .OrderByDescending(p => p.CreatedAt)
-            .ToArray();
+        // var notes = await RemarksCommonQuery(_dbContext.AdminNotes);
+        // var watchlist = await RemarksCommonQuery(_dbContext.AdminWatchlists);
+        // var messages = await RemarksCommonQuery(_dbContext.AdminMessages);
+        //
+        // Remarks = notes.Concat(watchlist).Concat(messages)
+        //     .OrderByDescending(p => p.CreatedAt)
+        //     .ToArray();
 
         PlayTimes = await _dbContext.PlayTime
             .Where(t => t.PlayerId == userId)
@@ -86,16 +86,16 @@ public sealed class Info : PageModel
 
         return Page();
 
-        async Task<IAdminRemarksCommon[]> RemarksCommonQuery<T>(IQueryable<T> query) where T : class, IAdminRemarksCommon
-        {
-            return await query
-                .Where(n => n.PlayerUserId == userId)
-                .Where(n => n.ExpirationTime == null || n.ExpirationTime > DateTime.UtcNow)
-                .Where(n => !n.Deleted)
-                .Include(n => n.CreatedBy)
-                .Include(n => n.LastEditedBy)
-                .Cast<IAdminRemarksCommon>()
-                .ToArrayAsync();
-        }
+        // async Task<IAdminRemarksCommon[]> RemarksCommonQuery<T>(IQueryable<T> query) where T : class, IAdminRemarksCommon
+        // {
+        //     return await query
+        //         .Where(n => n.PlayerUserId == userId)
+        //         .Where(n => n.ExpirationTime == null || n.ExpirationTime > DateTime.UtcNow)
+        //         .Where(n => !n.Deleted)
+        //         .Include(n => n.CreatedBy)
+        //         .Include(n => n.LastEditedBy)
+        //         .Cast<IAdminRemarksCommon>()
+        //         .ToArrayAsync();
+        // }
     }
 }
