@@ -32,6 +32,7 @@
         <th>Sex</th>
         <th>Gender</th>
         <th>Species</th>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "bank_balance", "Bank Balance"))"/>
         <th>Favorite job</th>
     </tr>
     </thead>
@@ -56,6 +57,7 @@
             <td>@profile.Sex</td>
             <td>@profile.Gender</td>
             <td>@profile.Species</td>
+            <td>@profile.BankBalance</td>
             @{ var favJob = profile.Jobs.SingleOrDefault(e => e.Priority == DbJobPriority.High); }
             <td>@(favJob == null ? "none" : favJob.JobName)</td>
         </tr>

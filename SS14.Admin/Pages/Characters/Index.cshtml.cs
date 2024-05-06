@@ -28,6 +28,7 @@ public sealed class CharactersIndexModel : PageModel
     {
         SortState.AddColumn("player_name", p => p.Player!.LastSeenUserName, SortOrder.Ascending);
         SortState.AddColumn("character_name", p => p.Profile.CharacterName);
+        SortState.AddColumn("bank_balance", p => p.Profile.BankBalance);
         SortState.Init(sort, AllRouteData);
 
         Pagination.Init(pageIndex, perPage, AllRouteData);
