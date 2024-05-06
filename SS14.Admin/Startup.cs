@@ -69,6 +69,20 @@ namespace SS14.Admin
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.GetClaimsFromUserInfoEndpoint = true;
+                    // Frontier-Patch-Start: Docker patch - https://github.com/Morb0/robust-docker/blob/master/ss14-admin-dockerify.patch
+                    options.NonceCookie.SameSite = SameSiteMode.None;
+                    options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.CorrelationCookie.SameSite = SameSiteMode.None;
+                    options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                    options.Events.OnRedirectToIdentityProvider = async ctx =>
+                    {
+                        if (ctx.ProtocolMessage.RedirectUri.StartsWith("http://"))
+                                ctx.ProtocolMessage.RedirectUri =
+                                        ctx.ProtocolMessage.RedirectUri.Replace("http://", "https://");
+                        await Task.FromResult(0);
+                    };
+                    // Frontier-Patch-End
 
                     options.Events.OnTokenValidated = async ctx =>
                     {
@@ -113,7 +127,7 @@ namespace SS14.Admin
             }
 
             app.UseAuthentication();
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); // Frontier-Patch
             app.UseStaticFiles();
 
             app.UseRouting();
